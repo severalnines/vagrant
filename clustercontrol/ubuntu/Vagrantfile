@@ -6,6 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 $script = <<SCRIPT
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+chmod 700 /root/.ssh/authorized_keys
 apt-get -y install wget
 wget http://severalnines.com/downloads/cmon/install-cc
 chmod +x install-cc

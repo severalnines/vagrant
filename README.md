@@ -30,6 +30,16 @@ The default memory allocated for each instance is 768MB.
 - 10.10.10.12 DB 2
 - 10.10.10.13 DB 3
 
+## Setup password-less SSH access for the ClusterControl Controller process
+
+    # default password for the vagrant user is 'vagrant' 
+    $ vagrant ssh vm1
+
+    # to all DB nodes copy over the root's public ssh key
+    [vagrant@n1 ~]$ for h in 10.10.10.11 10.10.10.12 10.10.10.13; do \
+    sudo cat /root/.ssh/id_rsa.pub | ssh $h "sudo mkdir -p /root/.ssh && sudo tee -a /root/.ssh/authorized_keys && sudo chmod 700 /root/.ssh && sudo chmod 600 /root/.ssh/authorized_keys"; \
+    done;
+
 Open your web browser to http://localhost:8080/clustercontrol
 
 1. Register your ClusterControl admin user.
