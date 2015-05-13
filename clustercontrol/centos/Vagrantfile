@@ -5,6 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 $script = <<SCRIPT
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
 yum -y install wget
 wget http://severalnines.com/downloads/cmon/install-cc
 chmod +x install-cc
