@@ -37,7 +37,9 @@ The default memory allocated for each instance is 768MB.
 
     # to all DB nodes copy over the root's public ssh key
     [vagrant@n1 ~]$ for h in 10.10.10.11 10.10.10.12 10.10.10.13; do \
-    sudo cat /root/.ssh/id_rsa.pub | ssh $h "sudo mkdir -p /root/.ssh && sudo tee -a /root/.ssh/authorized_keys && sudo chmod 700 /root/.ssh && sudo chmod 600 /root/.ssh/authorized_keys"; \
+    sudo cat /root/.ssh/id_rsa.pub | ssh $h "sudo mkdir -p /root/.ssh && \ 
+    sudo tee -a /root/.ssh/authorized_keys && sudo chmod 700 /root/.ssh && \ 
+    sudo chmod 600 /root/.ssh/authorized_keys"; \
     done;
 
 Open your web browser to http://localhost:8080/clustercontrol
