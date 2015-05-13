@@ -7,19 +7,19 @@ The default MySQL root user password on the ClusterControl host is 'root123'.
 ## Centos
 Launches 1 instance for ClusterControl and 3 instances for DB Nodes. 
 
-    $ cd clustercontrol/centos
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
     $ vagrant box add chef/centos-7.0
+    $ cd clustercontrol/centos
     $ vagrant up
 
 ## Ubuntu
 Launches 1 instance for ClusterControl and 3 instances for DB Nodes.
 
-    $ cd clustercontrol/ubuntu 
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
     $ vagrant box add ubuntu/trusty64
+    $ cd clustercontrol/ubuntu 
     $ vagrant up
 
 ## Default Instances
