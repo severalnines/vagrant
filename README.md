@@ -9,7 +9,7 @@ Launches 1 instance for ClusterControl and 3 instances for DB Nodes.
 
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
-    $ vagrant box add chef/centos-7.0
+    $ vagrant box add bento/centos-7.1
     $ cd clustercontrol/centos
     $ vagrant up
 
