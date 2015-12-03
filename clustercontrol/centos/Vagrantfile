@@ -15,7 +15,7 @@ chmod +x install-cc
 S9S_CMON_PASSWORD=cmon S9S_ROOT_PASSWORD=root123 S9S_DB_PORT=3306 HOST=10.10.10.10 ./install-cc
 SCRIPT
 
-$dbscript = <<$SCRIPT
+$dbscript = <<SCRIPT
 mkdir /root/.ssh
 cp /vagrant/authorized_keys /root/.ssh/authorized_keys
 chmod 700 /root/.ssh/
