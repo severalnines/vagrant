@@ -19,7 +19,7 @@ Launches 1 instance for ClusterControl and 3 instances for DB Nodes.
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
 
-    $ vagrant box add bento/ubuntu-16.04
+    $ vagrant box add ubuntu/trusty64
     $ cd clustercontrol/ubuntu 
     $ vagrant up
 
