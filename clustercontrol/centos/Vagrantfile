@@ -5,46 +5,50 @@
 VAGRANTFILE_API_VERSION = "2"
 
 $script = <<SCRIPT
-ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
-cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
-cp /root/.ssh/authorized_keys /vagrant/authorized_keys
-chmod 700 /root/.ssh/authorized_keys
+cp /vagrant/vagrant_id_rsa ~vagrant/.ssh/id_rsa
+chmod 400 ~vagrant/.ssh/id_rsa
+chown vagrant.vagrant ~vagrant/.ssh/id_rsa
+
 yum -y install wget
 wget http://severalnines.com/downloads/cmon/install-cc
 chmod +x install-cc
 S9S_CMON_PASSWORD=cmon S9S_ROOT_PASSWORD=root123 S9S_DB_PORT=3306 HOST=10.10.10.10 ./install-cc
+exit 0
 SCRIPT
 
-$dbscript = <<SCRIPT
-mkdir /root/.ssh
-cp /vagrant/authorized_keys /root/.ssh/authorized_keys
-chmod 700 /root/.ssh/
-chmod 600 /root/.ssh/authorized_keys
-SCRIPT
+$addhosts = <<ADDHOSTS
+cat >> /etc/hosts <<EOF
+10.10.10.10 clustercontrol.local
+10.10.10.11 db1.local
+10.10.10.12 db2.local
+10.10.10.13 db3.local
+10.10.10.14 db4.local
+10.10.10.15 db5.local
+EOF
+ADDHOSTS
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # All Vagrant configuration is done here. The most common configuration
-  # options are documented and commented below. For a complete reference,
-  # please see the online documentation at vagrantup.com.
+    # All Vagrant configuration is done here. The most common configuration
+    # options are documented and commented below. For a complete reference,
+    # please see the online documentation at vagrantup.com.
 
-  # Every Vagrant virtual environment requires a box to build off of.
-  4.times do |n|
-    config.vm.define "vm"+(1+n).to_s do |cc|
-        config.ssh.insert_key = false
-        #cc.ssh.private_key_path = "<my private ssh key>"
-        # change the box name if you want to use another box
-        cc.vm.box = "bento/centos-7.1"
-        cc.vm.host_name = "n" + (1+n).to_s
-        cc.vm.network :private_network, ip: "10.10.10.1" + n.to_s
-        cc.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "768"]
-        end
-        if cc.vm.hostname == "n1" then
-            cc.vm.network :forwarded_port, guest: 80, host: (8080+n)
-            cc.vm.provision "shell", inline: $script, privileged: true
-        else
-            cc.vm.provision "shell", inline: $dbscript, privileged: true
+    # Every Vagrant virtual environment requires a box to build off of.
+    config.ssh.insert_key = false
+    4.times do |n|
+        config.vm.define "vm"+(1+n).to_s do |cc|
+            # change the box name if you want to use another box
+            cc.vm.box = "bento/centos-7.3"
+            cc.vm.hostname = "n" + (1+n).to_s
+            cc.vm.network :private_network, ip: "10.10.10.1" + n.to_s
+            cc.vm.provider :virtualbox do |vb|
+                vb.customize ["modifyvm", :id, "--memory", "1024"]
+            end
+            cc.vm.provision "shell", inline: $addhosts, privileged: true
+
+            if cc.vm.hostname == "n1" then
+                cc.vm.network :forwarded_port, guest: 80, host: (9080+n)
+                cc.vm.provision "shell", inline: $script, privileged: true, name: "install-cc"
+            end
         end
     end
-  end
 end

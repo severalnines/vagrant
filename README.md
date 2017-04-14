@@ -1,15 +1,15 @@
 # ClusterControl Vagrant files
 Vagrant files to install the latest released ClusterControl version on Centos/Redhat or Debian/Ubuntu based distributions.
-The default MySQL root user password on the ClusterControl host is 'root123'.
 
-    $ git clone git@github.com:severalnines/vagrant.git
+    $ git clone https://github.com/severalnines/vagrant.git
 
 ## Centos
 Launches 1 instance for ClusterControl and 3 instances for DB Nodes. 
 
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
-    $ vagrant box add bento/centos-7.1
+
+    $ vagrant box add bento/centos-7.3
     $ cd clustercontrol/centos
     $ vagrant up
 
@@ -18,31 +18,35 @@ Launches 1 instance for ClusterControl and 3 instances for DB Nodes.
 
     # Download a base image from HashiCorp. 
     # If you want to use an existing or another box then change the Vagrantfile first.
+
     $ vagrant box add ubuntu/trusty64
     $ cd clustercontrol/ubuntu 
     $ vagrant up
 
 ## Default Instances
-The default memory allocated for each instance is 768MB.
+The default memory allocated for each instance is 1024MB.
 
-- 10.10.10.10 ClusterControl
-- 10.10.10.11 DB 1
-- 10.10.10.12 DB 2
-- 10.10.10.13 DB 3
+    # hosts
+    $ cat /etc/hosts
+    10.10.10.10 clustercontrol.local
+    10.10.10.11 db1.local
+    10.10.10.12 db2.local
+    10.10.10.13 db3.local
+    10.10.10.14 db4.local
+    10.10.10.15 db5.local
 
-## Setup password-less SSH access for the ClusterControl Controller process
+## Default Users and Passwords
 
-    # default password for the vagrant user is 'vagrant' 
+    # default password for the ssh vagrant user is 'vagrant' 
     $ vagrant ssh vm1
 
-    # to all DB nodes copy over the root's public ssh key
-    [vagrant@n1 ~]$ for h in 10.10.10.11 10.10.10.12 10.10.10.13; do \
-    sudo cat /root/.ssh/id_rsa.pub | ssh $h "sudo mkdir -p /root/.ssh && \ 
-    sudo tee -a /root/.ssh/authorized_keys && sudo chmod 700 /root/.ssh && \ 
-    sudo chmod 600 /root/.ssh/authorized_keys"; \
-    done;
+    # default password for the cmon user is 'cmon'
+    $ mysql -u cmon -p -e "select 1"
+    
+    # default password for the mysql root user is 'root123'
+    $ mysql -u root -p -e "select 1"
 
-Open your web browser to http://localhost:8080/clustercontrol
+Open your web browser to http://10.10.10.10/clustercontrol
 
 1. Register your ClusterControl admin user.
-2. Create your database cluster on the available DB nodes by clicking on 'Create Database Cluster'.
+2. Create your database cluster by clicking on 'Deploy' to start the deployment wizard.
