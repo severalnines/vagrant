@@ -12,7 +12,7 @@ chown vagrant.vagrant ~vagrant/.ssh/id_rsa
 apt-get install -y wget
 wget http://severalnines.com/downloads/cmon/install-cc
 chmod +x install-cc
-S9S_CMON_PASSWORD=cmon S9S_ROOT_PASSWORD=root123 S9S_DB_PORT=3306 HOST=10.10.10.10 ./install-cc
+S9S_CMON_PASSWORD='cmon' S9S_ROOT_PASSWORD='root123' S9S_DB_PORT=3306 HOST=10.10.10.10 INNODB_BUFFER_POOL_SIZE=128 ./install-cc
 exit 0
 SCRIPT
 
